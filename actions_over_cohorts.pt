@@ -1,0 +1,25 @@
+reset
+
+# Tab separated values
+set datafile separator ","
+# Ignore lines containing column headings
+#set datafile commentschars "DW"
+# Don't include a key since there is only one range being plotted
+set nokey
+
+set title "Total actions executed per cohort"
+set ylabel "Actions executed"
+set xlabel "Cohort"
+
+# We need a larger space at the bottom of the graph to fit in the dates.
+set bmargin 5
+
+set yrange [1:50];
+plot 'cohorts_breakdown.csv' using 1:2 pt 3 ps 5
+
+set term postscript
+set output "figures/actions_over_cohorts.ps"
+replot
+set term png
+set output "figures/actions_over_cohorts.png"
+replot

@@ -1,0 +1,38 @@
+clear
+reset
+#set key off
+set border 3
+
+set key left top
+
+# Add a vertical dotted line at x=0 to show centre (mean) of distribution.
+set yzeroaxis
+
+# Each bar is half the (visual) width of its x-range.
+set boxwidth 1 absolute
+set style fill solid 1.0 noborder
+
+
+set title "Total sign-ups and activations per cohort"
+set ylabel "Users signed-up"
+set xlabel "Cohort"
+
+bin_width = 1;
+
+bin_number(x) = floor(x/bin_width)
+
+rounded(x) = bin_width * ( bin_number(x) )
+
+plot 'cohorts_breakdown.csv' using (rounded($1)):(1) smooth frequency with boxes title 'Number of Users signed up',\
+     'cohorts_activated.csv' using (rounded($1)):(1) smooth frequency with boxes title 'Number of Activated Users',\
+     'cohorts_project.csv' using (rounded($1)):(1) smooth frequency with boxes title 'Number of Users created project',\
+     'cohorts_10tests.csv' using (rounded($1)):(1) smooth frequency with boxes title 'Number of Users > 5 tests',\
+     'cohorts_100tests.csv' using (rounded($1)):(1) smooth frequency with boxes title 'Number of Users > 50 tests',\
+     'cohorts_newtest.csv' using (rounded($1)):(1) smooth frequency with boxes title 'Number of Users > Tests wihin 2 weeks'
+
+set term postscript
+set output "figures/cohorts_breakdown.ps" 
+replot
+set term png
+set output "figures/cohorts_breakdown.png" 
+replot
